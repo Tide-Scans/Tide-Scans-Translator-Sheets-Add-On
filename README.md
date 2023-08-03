@@ -4,7 +4,7 @@ The Tide Scans Translator Add-On for Google Sheets allows you to easily translat
 
 ## Features
 
-- Translate Japanese text to English using DeepL, Google Translate, or Jisho API.
+- Translate Japanese text to English using DeepL or the Google Translate API.
 - Fetch definitions and information from Jisho for Japanese words and phrases.
 - Generate a ChatGPT prompt for translating and defining sentences.
 - Customize translation range by specifying start and stop rows.
@@ -39,7 +39,7 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 - **DeepL Translation**: Translate Japanese text using the DeepL translation service.
 - **Google Translate**: Translate Japanese text using Google Translate.
-- **Jisho API**: Fetch definitions and information from Jisho dictionary.
+- **Jisho API**: Fetch definitions and information from the Jisho dictionary.
 
 ## Important Note
 
