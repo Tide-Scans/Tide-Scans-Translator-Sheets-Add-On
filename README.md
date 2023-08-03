@@ -37,9 +37,34 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 ## Translation Options
 
-- **DeepL Translation**: Translate Japanese text using the DeepL translation service.
-- **Google Translate**: Translate Japanese text using Google Translate.
-- **Jisho API**: Fetch definitions and information from the Jisho dictionary.
+### DeepL Translation
+
+- To use DeepL for translation, click on "Tide Scans Translator" in the menu, then select "Translate Japan to English (DeepL)" or "Translate Japan to English (DeepL) - Specific Row."
+
+- If prompted, enter your DeepL API Key. If you haven't provided it before, you'll be asked to enter it. The API Key will be saved for future use.
+
+- Follow the prompts to specify the start and stop rows for translation. The translation results will be added to Column B.
+
+### Google Translate
+
+- To use Google Translate, click on "Tide Scans Translator" in the menu, then select "Translate Japan to English (Google)" or "Translate Japan to English (Google) - Specific Row."
+
+- Follow the prompts to specify the start and stop rows for translation. The translation results will be added to Column C.
+
+### Jisho Word Information
+
+- To fetch word information from Jisho, click on "Tide Scans Translator" in the menu, then select "Translate Japan to English (Jisho)" or "Translate Japan to English (Jisho) - Specific Row."
+
+- Follow the prompts to specify the start and stop rows for fetching information. Raw data from Jisho API will be added to Column D.
+
+## Prompt Generation
+
+The Add-On also offers prompt generation for language learning using ChatGPT. To generate prompts:
+
+- Click on "Tide Scans Translator" in the menu, then select "Column E ChatGPT Prompt" or "Column E ChatGPT Prompt - Specific Row."
+
+- Follow the prompts to specify the start and stop rows for generating prompts. Prompts will be generated in Column E.
+
 
 ## Important Note
 
