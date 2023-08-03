@@ -55,7 +55,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Credits
 
-This Google Sheets Add-On is developed by [Your Name].
+This Google Sheets Add-On is developed by Tide Scans.
 
 ## Contact
 
