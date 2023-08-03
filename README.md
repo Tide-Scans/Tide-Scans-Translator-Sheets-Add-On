@@ -21,7 +21,9 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 4. Save the script by clicking the floppy disk icon or pressing `Ctrl + S` (`Cmd + S` on Mac).
 
-5. You should now see a new menu item named "Tide Scans Translator" in your Google Sheets toolbar.
+5. **Run** the 'onOpen' function by simply clicking the 'Run' button on the toolbar of the Apps Script editor.
+
+6. You should now see a new menu item named "Tide Scans Translator" in your Google Sheets toolbar.
 
 ## Usage
 
