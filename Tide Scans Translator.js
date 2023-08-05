@@ -6,13 +6,119 @@ function onOpen() {
     .createMenu('Tide Scans Translator')
     .addItem('Translate Japan to English (DeepL)', 'showPromptForDeepLApiKey')
     .addItem('Translate Japan to English (DeepL) - Specific Row', 'showPromptForDeepLApiKeyRow')
+    .addSeparator()
     .addItem('Translate Japan to English (Google)', 'showPromptForStartAndStopRowGoogleTranslate')
     .addItem('Translate Japan to English (Google) - Specific Row', 'showPromptForStopRowGoogleTranslate')
-    .addItem('Translate Japan to English (Jisho)', 'showPromptForJishoStartAndStopRow')
-    .addItem('Translate Japan to English (Jisho) - Specific Row', 'showPromptForJishoRow')
+    .addSeparator()
+    .addItem('Fetch Raw Information (Jisho)', 'showPromptForJishoStartAndStopRow')
+    .addItem('Fetch Raw Information (Jisho) - Specific Row', 'showPromptForJishoRow')
+    .addSeparator()
     .addItem('Column E ChatGPT Prompt', 'showPromptForTranslateAndDefineInColumnEWithStartAndStopRow')
     .addItem('Column E ChatGPT Prompt - Specific Row', 'showPromptForTranslateAndDefineInColumnE')
+    .addSeparator()
+    .addItem('Remove Spaces in Column A - Entire Column', 'removeSpacesInColumnA')
+    .addItem('Remove Spaces in Column A - Specific Row', 'showPromptForRemoveSpacesInColumnARow')
+    .addItem('Remove Spaces in Column A - Start and Stop Row', 'showPromptForRemoveSpacesInColumnA')
     .addToUi();
+}
+
+//Remove Spaces in Column A
+
+function removeSpacesInColumnA() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert(
+    "Remove Spaces in Column A - Entire Column",
+    "This action will remove all spaces in Column A. Are you sure you want to continue?",
+    ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.YES) {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var columnA = sheet.getRange('A:A').getValues();
+
+    for (var i = 0; i < columnA.length; i++) {
+      if (columnA[i][0] !== '') {
+        var newValue = columnA[i][0].replace(/\s+/g, '');  // Remove spaces
+        sheet.getRange(i + 1, 1).setValue(newValue);
+      }
+    }
+
+    SpreadsheetApp.getUi().alert("Spaces removed from Column A - Entire Column.");
+  } else {
+    SpreadsheetApp.getUi().alert("Action canceled. Spaces were not removed.");
+  }
+}
+
+function showPromptForRemoveSpacesInColumnARow() {
+  var result = SpreadsheetApp.getUi().prompt(
+    'Enter the row number to remove spaces in Column A:',
+    SpreadsheetApp.getUi().ButtonSet.OK_CANCEL
+  );
+
+  if (result.getSelectedButton() === SpreadsheetApp.getUi().Button.OK) {
+    var rowNumberText = result.getResponseText();
+    var rowNumber = parseInt(rowNumberText);
+    if (!isNaN(rowNumber)) {
+      removeSpacesInColumnASpecificRow(rowNumber);
+    } else {
+      SpreadsheetApp.getUi().alert('Invalid input. Please enter a valid row number.');
+    }
+  }
+}
+
+function removeSpacesInColumnASpecificRow(rowNumber) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnAValue = sheet.getRange(rowNumber, 1).getValue();
+
+  if (columnAValue !== '') {
+    var newValue = columnAValue.replace(/\s+/g, '');  // Remove spaces
+    sheet.getRange(rowNumber, 1).setValue(newValue);
+    SpreadsheetApp.getUi().alert("Spaces removed from Column A - Row " + rowNumber + ".");
+  } else {
+    SpreadsheetApp.getUi().alert("Column A is empty for Row " + rowNumber + ".");
+  }
+}
+
+function showPromptForRemoveSpacesInColumnA() {
+  var ui = SpreadsheetApp.getUi();
+  var startResult = ui.prompt(
+    'Enter the start row number to remove spaces in Column A:',
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (startResult.getSelectedButton() === ui.Button.OK) {
+    var startRowText = startResult.getResponseText();
+    var startRow = parseInt(startRowText);
+    if (isNaN(startRow) || startRow <= 0) {
+      startRow = 1;
+    }
+    var stopResult = ui.prompt(
+      'Enter the stop row number to remove spaces in Column A:',
+      ui.ButtonSet.OK_CANCEL
+    );
+    if (stopResult.getSelectedButton() === ui.Button.OK) {
+      var stopRowText = stopResult.getResponseText();
+      var stopRow = parseInt(stopRowText);
+      if (!isNaN(stopRow)) {
+        removeSpacesInColumnAStartAndStopRow(startRow, stopRow);
+      } else {
+        ui.alert('Invalid input. Please enter a valid stop row number.');
+      }
+    }
+  }
+}
+
+function removeSpacesInColumnAStartAndStopRow(startRow, stopRow) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+
+  for (var i = startRow - 1; i < columnA.length && i < stopRow; i++) {
+    if (columnA[i][0] !== '') {
+      var newValue = columnA[i][0].replace(/\s+/g, '');  // Remove spaces
+      sheet.getRange(i + 1, 1).setValue(newValue);
+    }
+  }
+
+  SpreadsheetApp.getUi().alert("Spaces removed from Column A - Rows " + startRow + " to " + stopRow + ".");
 }
 
 //DeepL Here
