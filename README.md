@@ -1,12 +1,12 @@
 # Tide Scans Translator Google Sheets Add-On
 
-The Tide Scans Translator Add-On for Google Sheets allows you to easily translate and define Japanese text using various translation services and APIs. This add-on provides a user-friendly interface within Google Sheets to perform translations and retrieve definitions from external sources.
+The Tide Scans Translator Add-On for Google Sheets allows you to easily translate and define Japanese text using various translation services and APIs. This add-on provides a user-friendly interface within Google Sheets to perform translations, fetch word information, and generate prompts for language learning.
 
 ## Features
 
 - Translate Japanese text to English using DeepL or the Google Translate API.
 - Fetch definitions and information from Jisho for Japanese words and phrases.
-- Generate a ChatGPT prompt for translating and defining sentences.
+- Generate prompts for language learning using ChatGPT.
 - Customize translation range by specifying start and stop rows.
 
 ## Installation
@@ -29,17 +29,17 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 1. Click on the "Tide Scans Translator" menu to access various translation and information fetching options.
 
-2. Choose the desired translation or information fetching method based on your needs.
+2. Choose the desired translation, information fetching, or prompt generation method based on your needs.
 
-3. Follow the on-screen prompts to provide necessary input, such as DeepL API Key, row numbers, etc.
+3. Follow the on-screen prompts to provide necessary input, such as API keys, row numbers, etc.
 
-4. The Add-On will automatically translate Japanese text, fetch information, and populate the specified columns with the results.
+4. The Add-On will automatically perform translations, fetch information, or generate prompts and populate the specified columns with the results.
 
 ## Translation Options
 
 ### DeepL Translation
 
-- To use DeepL for translation, click on "Tide Scans Translator" in the menu, then select "Translate Japan to English (DeepL)" or "Translate Japan to English (DeepL) - Specific Row."
+- To use DeepL for translation, click on "Tide Scans Translator" in the menu, then select the DeepL translation option of your choice.
 
 - If prompted, enter your DeepL API Key. If you haven't provided it before, you'll be asked to enter it. The API Key will be saved for future use.
 
@@ -47,13 +47,13 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 ### Google Translate
 
-- To use Google Translate, click on "Tide Scans Translator" in the menu, then select "Translate Japan to English (Google)" or "Translate Japan to English (Google) - Specific Row."
+- To use Google Translate, click on "Tide Scans Translator" in the menu, then select the Google Translate option of your choice.
 
 - Follow the prompts to specify the start and stop rows for translation. The translation results will be added to Column C.
 
 ### Jisho Word Information
 
-- To fetch word information from Jisho, click on "Tide Scans Translator" in the menu, then select "Translate Japan to English (Jisho)" or "Translate Japan to English (Jisho) - Specific Row."
+- To fetch word information from Jisho, click on "Tide Scans Translator" in the menu, then select the Jisho option of your choice.
 
 - Follow the prompts to specify the start and stop rows for fetching information. Raw data from Jisho API will be added to Column D.
 
@@ -61,12 +61,11 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 The Add-On also offers prompt generation for language learning using ChatGPT. To generate prompts:
 
-- Click on "Tide Scans Translator" in the menu, then select "Column E ChatGPT Prompt" or "Column E ChatGPT Prompt - Specific Row."
+- Click on "Tide Scans Translator" in the menu, then select the prompt generation option of your choice.
 
 - Follow the prompts to specify the start and stop rows for generating prompts. Prompts will be generated in Column E.
 
-
-## Important Note
+## Important Notes
 
 - For using the DeepL translation service, you need to provide your DeepL API Key. The Add-On will guide you through the process of entering the API Key.
 
