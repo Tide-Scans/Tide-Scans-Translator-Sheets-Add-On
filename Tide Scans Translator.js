@@ -129,7 +129,7 @@ function removeSpacesInColumnAStartAndStopRow(startRow, stopRow) {
 
 function translateEntireColumnWithDeepL() {
   var ui = SpreadsheetApp.getUi();
-  var response = ui.alert('Are you sure you want to translate the entire column from Japanese to English using DeepL?', ui.ButtonSet.YES_NO);
+  var response = ui.alert('Translate Japan to English (DeepL) - Entire Column', 'Are you sure you want to translate the entire column from Japanese to English using DeepL?', ui.ButtonSet.YES_NO);
 
   if (response === ui.Button.NO) {
     return;
@@ -353,7 +353,7 @@ function translateJapanToEnglishWithDeepL(startRow, stopRow) {
 
 function translateEntireColumnWithGoogleTranslate() {
   var ui = SpreadsheetApp.getUi();
-  var response = ui.alert('Are you sure you want to translate the entire column from Japanese to English using Google Translate?', ui.ButtonSet.YES_NO);
+  var response = ui.alert('Translate Japan to English (Google) - Entire Column', 'Are you sure you want to translate the entire column from Japanese to English using Google Translate?', ui.ButtonSet.YES_NO);
 
   if (response === ui.Button.NO) {
     return;
@@ -469,7 +469,7 @@ function showPromptForStartAndStopRowGoogleTranslate() {
 
 function fetchEntireColumnFromJisho() {
   var ui = SpreadsheetApp.getUi();
-  var response = ui.alert('Are you sure you want to fetch information from Jisho for the entire column?', ui.ButtonSet.YES_NO);
+  var response = ui.alert('Fetch Raw Information (Jisho) - Entire Column', 'Are you sure you want to fetch information from Jisho for the entire column?', ui.ButtonSet.YES_NO);
 
   if (response === ui.Button.NO) {
     return;
@@ -488,7 +488,7 @@ function fetchEntireColumnFromJisho() {
       if (rawInfo !== null) {
         sheet.getRange(i + 1, 4).setValue(JSON.stringify(rawInfo));
         fetchedWords++;
-        Utilities.sleep(334); // Add a delay of 0.5 seconds (500 milliseconds)
+        Utilities.sleep(500); // Add a delay of 0.5 seconds (500 milliseconds)
       }
     }
   }
@@ -585,7 +585,7 @@ function translateJapanToEnglishWithJisho(startRow, stopRow) {
       if (rawInfo !== null) {
         sheet.getRange(i + 1, 4).setValue(JSON.stringify(rawInfo));
         translatedCells++;
-        Utilities.sleep(334); // Add a delay of 0.5 seconds (500 milliseconds)
+        Utilities.sleep(500); // Add a delay of 0.5 seconds (500 milliseconds)
       }
     }
   }
@@ -609,7 +609,7 @@ function fetchJishoInfo(apiUrl) {
 
 function showPromptForTranslateAndDefineEntireColumnE() {
   var ui = SpreadsheetApp.getUi();
-  var response = ui.alert('Warning', 'This will translate and define values for the entire Column E. Are you sure you want to proceed?', ui.ButtonSet.YES_NO);
+  var response = ui.alert('Column E ChatGPT Prompt - Entire Column', 'This will translate and define values for the entire Column E. Are you sure you want to proceed?', ui.ButtonSet.YES_NO);
 
   if (response === ui.Button.YES) {
     translateAndDefineEntireColumnE();
