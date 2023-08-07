@@ -4,21 +4,25 @@ function onOpen() {
   // Add a custom menu to the spreadsheet UI.
   SpreadsheetApp.getUi()
     .createMenu('Tide Scans Translator')
-    .addItem('Translate Japan to English (DeepL)', 'showPromptForDeepLApiKey')
+    .addItem('Translate Japan to English (DeepL) - Entire Column', 'translateEntireColumnWithDeepL')
+    .addItem('Translate Japan to English (DeepL) - Start and Stop Row', 'showPromptForDeepLApiKey')
     .addItem('Translate Japan to English (DeepL) - Specific Row', 'showPromptForDeepLApiKeyRow')
     .addSeparator()
-    .addItem('Translate Japan to English (Google)', 'showPromptForStartAndStopRowGoogleTranslate')
+    .addItem('Translate Japan to English (Google) - Entire Column', 'translateEntireColumnWithGoogleTranslate')
+    .addItem('Translate Japan to English (Google) - Start and Stop Row', 'showPromptForStartAndStopRowGoogleTranslate')
     .addItem('Translate Japan to English (Google) - Specific Row', 'showPromptForStopRowGoogleTranslate')
     .addSeparator()
-    .addItem('Fetch Raw Information (Jisho)', 'showPromptForJishoStartAndStopRow')
+    .addItem('Fetch Raw Information (Jisho) - Entire Column', 'fetchEntireColumnFromJisho')
+    .addItem('Fetch Raw Information (Jisho) - Start and Stop Row', 'showPromptForJishoStartAndStopRow')
     .addItem('Fetch Raw Information (Jisho) - Specific Row', 'showPromptForJishoRow')
     .addSeparator()
-    .addItem('Column E ChatGPT Prompt', 'showPromptForTranslateAndDefineInColumnEWithStartAndStopRow')
+    .addItem('Column E ChatGPT Prompt - Entire Column', 'showPromptForTranslateAndDefineEntireColumnE')
+    .addItem('Column E ChatGPT Prompt - Start and Stop Row', 'showPromptForTranslateAndDefineInColumnEWithStartAndStopRow')
     .addItem('Column E ChatGPT Prompt - Specific Row', 'showPromptForTranslateAndDefineInColumnE')
     .addSeparator()
     .addItem('Remove Spaces in Column A - Entire Column', 'removeSpacesInColumnA')
-    .addItem('Remove Spaces in Column A - Specific Row', 'showPromptForRemoveSpacesInColumnARow')
     .addItem('Remove Spaces in Column A - Start and Stop Row', 'showPromptForRemoveSpacesInColumnA')
+    .addItem('Remove Spaces in Column A - Specific Row', 'showPromptForRemoveSpacesInColumnARow')
     .addToUi();
 }
 
@@ -122,6 +126,44 @@ function removeSpacesInColumnAStartAndStopRow(startRow, stopRow) {
 }
 
 //DeepL Here
+
+function translateEntireColumnWithDeepL() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert('Are you sure you want to translate the entire column from Japanese to English using DeepL?', ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.NO) {
+    return;
+  }
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+  var columnB = sheet.getRange('B:B').getValues();
+  var translatedCells = 0;
+
+  // Check if DeepL API key is available
+  if (!deepLApiKey) {
+    showPromptForDeepLApiKey();
+    return;
+  }
+
+  for (var i = 0; i < columnA.length; i++) {
+    if (columnA[i][0] !== '' && columnB[i][0] === '') {
+      var textToTranslate = columnA[i][0];
+      var translatedText = translateWithDeepL(textToTranslate);
+      if (translatedText !== null) {
+        sheet.getRange(i + 1, 2).setValue(translatedText);
+        translatedCells++;
+      }
+    }
+  }
+
+  if (translatedCells > 0) {
+    var message = "Translated " + translatedCells + " cells from Japan to English using DeepL.";
+    ui.alert(message);
+  } else {
+    ui.alert("No cells were translated from Japan to English using DeepL.");
+  }
+}
 
 function showPromptForStartAndStopRowDeepL() {
   var ui = SpreadsheetApp.getUi();
@@ -309,6 +351,39 @@ function translateJapanToEnglishWithDeepL(startRow, stopRow) {
 
 //Google Here
 
+function translateEntireColumnWithGoogleTranslate() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert('Are you sure you want to translate the entire column from Japanese to English using Google Translate?', ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.NO) {
+    return;
+  }
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+  var columnC = sheet.getRange('C:C').getValues();
+  var translatedCells = 0;
+
+  for (var i = 0; i < columnA.length; i++) {
+    if (columnA[i][0] !== '' && columnC[i][0] === '') {
+      var textToTranslate = columnA[i][0];
+      var translatedText = LanguageApp.translate(textToTranslate, 'ja', 'en');
+      if (translatedText !== null) {
+        sheet.getRange(i + 1, 3).setValue(translatedText);
+        translatedCells++;
+      }
+      Utilities.sleep(200); // Add a delay of 0.2 seconds (200 milliseconds)
+    }
+  }
+
+  if (translatedCells > 0) {
+    var message = "Translated " + translatedCells + " cells from Japan to English using Google Translate.";
+    ui.alert(message);
+  } else {
+    ui.alert("No cells were translated from Japan to English using Google Translate.");
+  }
+}
+
 function showPromptForStopRowGoogleTranslate() {
   var result = SpreadsheetApp.getUi().prompt('Enter the row number to translate with Google Translate:', SpreadsheetApp.getUi().ButtonSet.OK_CANCEL);
 
@@ -391,6 +466,41 @@ function showPromptForStartAndStopRowGoogleTranslate() {
 
 
 //Jisho Here
+
+function fetchEntireColumnFromJisho() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert('Are you sure you want to fetch information from Jisho for the entire column?', ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.NO) {
+    return;
+  }
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+  var columnD = sheet.getRange('D:D').getValues();
+  var fetchedWords = 0;
+
+  for (var i = 0; i < columnA.length; i++) {
+    if (columnA[i][0] !== '' && columnD[i][0] === '') {
+      var textToTranslate = columnA[i][0];
+      var apiUrl = 'https://jisho.org/api/v1/search/words?keyword=' + encodeURI(textToTranslate);
+      var rawInfo = fetchJishoInfo(apiUrl);
+      if (rawInfo !== null) {
+        sheet.getRange(i + 1, 4).setValue(JSON.stringify(rawInfo));
+        fetchedWords++;
+        Utilities.sleep(334); // Add a delay of 0.5 seconds (500 milliseconds)
+      }
+    }
+  }
+
+  if (fetchedWords > 0) {
+    var message = "Fetched raw information for " + fetchedWords + " words from Jisho.";
+    ui.alert(message);
+    translateAndDefineEntireColumnE();
+  } else {
+    ui.alert("No words were fetched from Jisho.");
+  }
+}
 
 function showPromptForJishoStartAndStopRow() {
   var ui = SpreadsheetApp.getUi();
@@ -475,7 +585,7 @@ function translateJapanToEnglishWithJisho(startRow, stopRow) {
       if (rawInfo !== null) {
         sheet.getRange(i + 1, 4).setValue(JSON.stringify(rawInfo));
         translatedCells++;
-        Utilities.sleep(500); // Add a delay of 0.5 seconds (500 milliseconds)
+        Utilities.sleep(334); // Add a delay of 0.5 seconds (500 milliseconds)
       }
     }
   }
@@ -496,6 +606,39 @@ function fetchJishoInfo(apiUrl) {
 }
 
 //ChatGPT Prompt Here
+
+function showPromptForTranslateAndDefineEntireColumnE() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert('Warning', 'This will translate and define values for the entire Column E. Are you sure you want to proceed?', ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.YES) {
+    translateAndDefineEntireColumnE();
+  }
+}
+
+function translateAndDefineEntireColumnE() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+  var columnD = sheet.getRange('D:D').getValues();
+  var translatedRows = 0;
+
+  for (var i = 0; i < columnA.length; i++) {
+    if (columnA[i][0] !== '' && columnD[i][0] !== '') {
+      var textToTranslate = columnA[i][0];
+      var dataToDefine = columnD[i][0];
+      var translatedAndDefinedText = "Using this data " + dataToDefine + ", I want you to understand what each is telling you. Try to use it for everything, but for the thing you didn't get the meaning for, figure it out yourself. After you understand each individual phrase, define this sentence, and give me a short breakdown. Only give me the English definition of the sentence/phrase/words. Here it is: (" + textToTranslate + "). Here’s an example for how your output should look like:[Here Should Be a Line Break, but It Can not Be Shown]" + 'Sure, here are the English definitions for the sentence "この街はもうお終いだよ":[Here Should Be a Line Break, but It Can not Be Shown][Here Should Be a Line Break, but It Can not Be Shown]' + '(この街 (このまち) - This town/city[Here Should Be a Line Break, but It Can not Be Shown]' + 'もう (もう) - Already[Here Should Be a Line Break, but It Can not Be Shown]' + 'お終い (おしまい) - The end; finished[Here Should Be a Line Break, but It Can not Be Shown]' + 'だ (だ) - Copula (is/are)[Here Should Be a Line Break, but It Can not Be Shown]' + 'よ (よ) - Sentence-ending particle for emphasis or assertion[Here Should Be a Line Break, but It Can not Be Shown][Here Should Be a Line Break, but It Can not Be Shown]' + 'English Translation: "This town/city is already finished." or "This town/city is coming to an end.")' + " so make the breakdown look like that make sure everyplace that has the Link Break text look at it as a line break and not apart of this text as anything other than a Link Break. " + 'Now I am going to tell you in text form what it should look like; no bold text. Say, “Sure, here are the English definitions for the sentence "この街はもうお終いだよ":”Make sure you change the Japanese text to the one I have provided. Now,  after 2 line breaks, add only the word, reading, and English definition/part of speech if there is no meaning, as shown earlier. No identifying anything Just place the text one after another like how it was shown before, and after 2 more line breaks after placing all the other stuff, add the English Translation to make it look like this “English Translation: "This town/city is already finished." or "This town/city is coming to an end.” make sure to add the real translation of the provided text, do not mention any line breaks in your response. Also, do not take the definition and just add to the English translation; just pick one, no slashes unless there were slashes in the translation, If you want to get more definition, just add an “or” to separate it; if an “or” is not needed, do not add it. Again I want all the Word - reading - definition/part of speech in one line like I said before. Make sure to give all the definitions for every word.';
+      sheet.getRange(i + 1, 5).setValue(translatedAndDefinedText);
+      translatedRows++;
+    }
+  }
+
+  if (translatedRows > 0) {
+    var message = "Translated and defined values for " + translatedRows + " rows in Column E.";
+    SpreadsheetApp.getUi().alert(message);
+  } else {
+    SpreadsheetApp.getUi().alert("No rows were translated and defined in Column E.");
+  }
+}
 
 function showPromptForTranslateAndDefineInColumnEWithStartAndStopRow() {
   var ui = SpreadsheetApp.getUi();
