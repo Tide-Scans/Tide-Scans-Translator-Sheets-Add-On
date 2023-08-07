@@ -140,6 +140,37 @@ function removeSpacesInColumnAStartAndStopRow(startRow, stopRow) {
 
 //DeepL Here
 
+function showPromptForDeepLApiKeyEntireColumn() {
+  var ui = SpreadsheetApp.getUi();
+  var response;
+
+  deepLApiKey = PropertiesService.getUserProperties().getProperty('DeepL_API_Key');
+  var usePreviousKey = deepLApiKey !== null;
+
+  if (usePreviousKey) {
+    response = ui.alert('Do you want to use the previous DeepL API Key?', ui.ButtonSet.YES_NO);
+    if (response === ui.Button.YES) {
+      // Continue using the previous API key
+      translateEntireColumnWithDeepLWorking();
+      return;
+    }
+  }
+
+  response = ui.prompt('Enter your DeepL API Key:', ui.ButtonSet.OK_CANCEL);
+
+  if (response.getSelectedButton() === ui.Button.OK) {
+    var apiKey = response.getResponseText().trim();
+    if (apiKey !== '') {
+      deepLApiKey = apiKey;
+      // Save the API key to the user properties
+      PropertiesService.getUserProperties().setProperty('DeepL_API_Key', apiKey);
+      translateEntireColumnWithDeepLWorking();
+    } else {
+      ui.alert('Invalid input. Please enter a valid DeepL API Key.');
+    }
+  }
+}
+
 function translateEntireColumnWithDeepL() {
   var ui = SpreadsheetApp.getUi();
   var response = ui.alert('Translate Japan to English (DeepL) - Entire Column', 'Are you sure you want to translate the entire column from Japanese to English using DeepL?', ui.ButtonSet.YES_NO);
@@ -148,17 +179,22 @@ function translateEntireColumnWithDeepL() {
     return;
   }
 
+  // Check if DeepL API key is available
+  if (!deepLApiKey) {
+    showPromptForDeepLApiKeyEntireColumn();
+    return;
+  }
+
+  translateEntireColumnWithDeepLWorking();
+}
+
+function translateEntireColumnWithDeepLWorking() {
+  var ui = SpreadsheetApp.getUi();
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var columnA = sheet.getRange('A:A').getValues();
   var columnB = sheet.getRange('B:B').getValues();
   var translatedCells = 0;
-
-  // Check if DeepL API key is available
-  if (!deepLApiKey) {
-    showPromptForDeepLApiKey();
-    return;
-  }
-
+  
   for (var i = 0; i < columnA.length; i++) {
     if (columnA[i][0] !== '' && columnB[i][0] === '') {
       var textToTranslate = columnA[i][0];
@@ -176,6 +212,7 @@ function translateEntireColumnWithDeepL() {
   } else {
     ui.alert("No cells were translated from Japan to English using DeepL.");
   }
+  return;
 }
 
 function showPromptForStartAndStopRowDeepL() {
