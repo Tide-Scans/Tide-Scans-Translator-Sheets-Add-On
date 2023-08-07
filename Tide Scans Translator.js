@@ -23,7 +23,20 @@ function onOpen() {
     .addItem('Remove Spaces in Column A - Entire Column', 'removeSpacesInColumnA')
     .addItem('Remove Spaces in Column A - Start and Stop Row', 'showPromptForRemoveSpacesInColumnA')
     .addItem('Remove Spaces in Column A - Specific Row', 'showPromptForRemoveSpacesInColumnARow')
+    .addSeparator()
+    .addItem('Set Columns Widths to 300', 'setColumnWidthsTo300')
     .addToUi();
+}
+
+//Set Columns width to 300
+
+function setColumnWidthsTo300() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  
+  // Set the width of columns A, B, and C to 300
+  sheet.setColumnWidth(1, 300); // Column A
+  sheet.setColumnWidth(2, 300); // Column B
+  sheet.setColumnWidth(3, 300); // Column C
 }
 
 //Remove Spaces in Column A
