@@ -8,6 +8,9 @@ The Tide Scans Translator Add-On for Google Sheets allows you to easily translat
 - Fetch definitions and information from Jisho for Japanese words and phrases.
 - Generate prompts for language learning using ChatGPT.
 - Customize translation range by specifying start and stop rows.
+- Remove spaces in Column A for proper input handling.
+- Concatenate and output translation results for ChatGPT prompts in Column F.
+- Generate ChatGPT prompts in Column F.
 
 ## Installation
 
@@ -23,7 +26,7 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 5. **Run** the 'onOpen' function by simply clicking the 'Run' button on the toolbar of the Apps Script editor.
 
-6. You should now see a new menu item named "Tide Scans Translator" in your Google Sheets toolbar.
+6. You should now see a new menu item named "Tide Scans Translator" in your Google Sheets toolbar. This menu provides various translation and information fetching options.
 
 ## Usage
 
@@ -35,35 +38,37 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 4. The Add-On will automatically perform translations, fetch information, or generate prompts and populate the specified columns with the results.
 
-## Translation Options
+5. To remove spaces in Column A, select "Remove Spaces in Column A" from the "Tide Scans Translator" menu.
 
-### DeepL Translation
+6. To concatenate and output translation results, select "Concatenate and Output" from the "Tide Scans Translator" menu.
 
-- To use DeepL for translation, click on "Tide Scans Translator" in the menu, then select the DeepL translation option of your choice.
+7. To generate ChatGPT prompts, select "Generate ChatGPT Prompt" from the "Tide Scans Translator" menu. Prompts will be generated in Column F.
 
-- If prompted, enter your DeepL API Key. If you haven't provided it before, you'll be asked to enter it. The API Key will be saved for future use.
+## Additional Functionality
 
-- Follow the prompts to specify the start and stop rows for translation. The translation results will be added to Column B.
+Upon installation, the following additional functionality is automatically added to your Google Sheets:
 
-### Google Translate
+### Add-On Initialization
 
-- To use Google Translate, click on "Tide Scans Translator" in the menu, then select the Google Translate option of your choice.
+- The "Tide Scans Translator" menu is created in your Google Sheets toolbar upon initialization.
 
-- Follow the prompts to specify the start and stop rows for translation. The translation results will be added to Column C.
+- The "Tide Scans Translator" menu provides easy access to translation and information fetching options.
 
-### Jisho Word Information
+### Custom Menu Items
 
-- To fetch word information from Jisho, click on "Tide Scans Translator" in the menu, then select the Jisho option of your choice.
+- **DeepL Translation** submenu: Provides options to translate selected rows using DeepL.
 
-- Follow the prompts to specify the start and stop rows for fetching information. Raw data from Jisho API will be added to Column D.
+- **Google Translate** submenu: Provides options to translate selected rows using Google Translate.
 
-## Prompt Generation
+- **Jisho Word Information** submenu: Provides options to fetch word information using Jisho.
 
-The Add-On also offers prompt generation for language learning using ChatGPT. To generate prompts:
+- **Prompt Generation** submenu: Provides options to generate prompts for language learning using ChatGPT.
 
-- Click on "Tide Scans Translator" in the menu, then select the prompt generation option of your choice.
+- **Remove Spaces in Column A**: Removes spaces in Column A for proper input handling.
 
-- Follow the prompts to specify the start and stop rows for generating prompts. Prompts will be generated in Column E.
+- **Concatenate and Output**: Concatenates and outputs translation results for a better overview.
+
+- **Generate ChatGPT Prompt**: Generates ChatGPT prompts in Column F.
 
 ## Important Notes
 
