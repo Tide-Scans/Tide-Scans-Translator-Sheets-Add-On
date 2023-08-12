@@ -20,12 +20,195 @@ function onOpen() {
     .addItem('Column E ChatGPT Prompt - Start and Stop Row', 'showPromptForTranslateAndDefineInColumnEWithStartAndStopRow')
     .addItem('Column E ChatGPT Prompt - Specific Row', 'showPromptForTranslateAndDefineInColumnE')
     .addSeparator()
+    .addItem('Column F ChatGPT Prompt - Entire Column', 'showPromptForGPTEntireColumnF')
+    .addItem('Column F ChatGPT Prompt - Start and Stop Row', 'showPromptForGPTColumnFWithStartAndStopRow')
+    .addItem('Column F ChatGPT Prompt - Specific Row', 'showPromptForGPTColumnF')
+    .addSeparator()
     .addItem('Remove Spaces in Column A - Entire Column', 'removeSpacesInColumnA')
     .addItem('Remove Spaces in Column A - Start and Stop Row', 'showPromptForRemoveSpacesInColumnA')
     .addItem('Remove Spaces in Column A - Specific Row', 'showPromptForRemoveSpacesInColumnARow')
     .addSeparator()
+    .addItem('Concatenate and Output', 'concatenateAndOutputWithConfirmation')
+    .addSeparator()
     .addItem('Set Columns Widths to 300', 'setColumnWidthsTo300')
+    
     .addToUi();
+}
+
+//Column F ChatGPT Prompt
+
+function promptForGPTEntireColumnF() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+  var translatedRows = 0;
+
+  var lastRow = sheet.getLastRow();
+  var lastColumnBValue = sheet.getRange('B' + lastRow).getValue();
+  var lastColumnAValue = sheet.getRange('A' + lastRow).getValue();
+
+  if (lastColumnAValue !== '' && lastColumnBValue === '') {
+    var alertMessage = "Either Column A in the last row is not empty or There's nothing in Column B in the last row";
+    SpreadsheetApp.getUi().alert(alertMessage);
+    return;
+  }
+
+  for (var i = 0; i < columnA.length; i++) {
+    if (columnA[i][0] !== '') {
+      var textToTranslate = columnA[i][0];
+      var translatedAndDefinedText = 'When finding out the definition try to refer to this story, note that the context of the next line or previous line may not make sense so just figure it out yourself. when I ask you to translate refer to this story "'+ lastColumnBValue + '" here is the line I want translated "' + textToTranslate + '"';
+      sheet.getRange(i + 1, 6).setValue(translatedAndDefinedText);
+      translatedRows++;
+    }
+  }
+
+  if (translatedRows > 0) {
+    var message = "Prompt added for " + translatedRows + " rows in Column F.";
+    SpreadsheetApp.getUi().alert(message);
+  } else {
+    SpreadsheetApp.getUi().alert("No rows were translated and defined in Column F.");
+  }
+}
+
+function showPromptForGPTEntireColumnF() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert('Column F ChatGPT Prompt - Entire Column', 'This will create ChatGPT prompts for the entire Column F. Are you sure you want to proceed?', ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.YES) {
+    promptForGPTEntireColumnF();
+  }
+}
+
+function showPromptForGPTColumnFWithStartAndStopRow() {
+  var ui = SpreadsheetApp.getUi();
+  var startResult = ui.prompt('Enter the start row number:', ui.ButtonSet.OK_CANCEL);
+
+  if (startResult.getSelectedButton() === ui.Button.OK) {
+    var startRowText = startResult.getResponseText();
+    var startRow = parseInt(startRowText);
+    if (isNaN(startRow) || startRow <= 0) {
+      startRow = 1; // Set startRow to 1 if it's less than or equal to 0
+    }
+    if (!isNaN(startRow)) {
+      var stopResult = ui.prompt('Enter the stop row number:', ui.ButtonSet.OK_CANCEL);
+      if (stopResult.getSelectedButton() === ui.Button.OK) {
+        var stopRowText = stopResult.getResponseText();
+        var stopRow = parseInt(stopRowText);
+        if (!isNaN(stopRow)) {
+          gptColumnFWithStartAndStopRow(startRow, stopRow);
+        } else {
+          ui.alert('Invalid input. Please enter a valid stop row number.');
+        }
+      }
+    } else {
+      ui.alert('Invalid input. Please enter a valid start row number.');
+    }
+  }
+}
+
+function gptColumnFWithStartAndStopRow(startRow, stopRow) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+  var translatedRows = 0;
+
+  var lastRow = sheet.getLastRow();
+  var lastColumnBValue = sheet.getRange('B' + lastRow).getValue();
+  var lastColumnAValue = sheet.getRange('A' + lastRow).getValue();
+
+  if (lastColumnAValue !== '' && lastColumnBValue === '') {
+    var alertMessage = "Either Column A in the last row is not empty or There's nothing in Column B in the last row";
+    SpreadsheetApp.getUi().alert(alertMessage);
+    return;
+  }
+
+  for (var i = startRow - 1; i < columnA.length && i < stopRow; i++) {
+    if (columnA[i][0] !== '') {
+      var textToTranslate = columnA[i][0];
+      var translatedAndDefinedText = 'When finding out the definition try to refer to this story, note that the context of the next line or previous line may not make sense so just figure it out yourself. when I ask you to translate refer to this story "'+ lastColumnBValue + '" here is the line I want translated "' + textToTranslate + '"';
+      sheet.getRange(i + 1, 6).setValue(translatedAndDefinedText);
+      translatedRows++;
+    }
+  }
+
+  if (translatedRows > 0) {
+    var message = "Prompt added for " + translatedRows + " rows in Column F.";
+    SpreadsheetApp.getUi().alert(message);
+  } else {
+    SpreadsheetApp.getUi().alert("No rows were translated and defined in Column F.");
+  }
+}
+
+function showPromptForGPTColumnF() {
+  var ui = SpreadsheetApp.getUi();
+  var result = ui.prompt('Enter the row number to Column F ChatGPT Prompt:', ui.ButtonSet.OK_CANCEL);
+
+  if (result.getSelectedButton() === ui.Button.OK) {
+    var rowNumberText = result.getResponseText();
+    var rowNumber = parseInt(rowNumberText);
+    if (!isNaN(rowNumber)) {
+      gptColumnF(rowNumber);
+    } else {
+      ui.alert('Invalid input. Please enter a valid row number.');
+    }
+  }
+}
+
+function gptColumnF(rowNumber) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var columnA = sheet.getRange('A:A').getValues();
+  var i = rowNumber - 1; // Convert rowNumber to array index (0-based)
+
+  var lastRow = sheet.getLastRow();
+  var lastColumnBValue = sheet.getRange('B' + lastRow).getValue();
+  var lastColumnAValue = sheet.getRange('A' + lastRow).getValue();
+
+  if (lastColumnAValue !== '' && lastColumnBValue === '') {
+    var alertMessage = "Either Column A in the last row is not empty or There's nothing in Column B in the last row";
+    SpreadsheetApp.getUi().alert(alertMessage);
+    return;
+  }
+
+  if (i >= 0 && i < columnA.length) {
+    var textToTranslate = columnA[i][0];
+    if (textToTranslate !== '') {
+      var translatedAndDefinedText = 'When finding out the definition try to refer to this story, note that the context of the next line or previous line may not make sense so just figure it out yourself. when I ask you to translate refer to this story "'+ lastColumnBValue + '" here is the line I want translated "' + textToTranslate + '"';
+      sheet.getRange(i + 1, 6).setValue(translatedAndDefinedText);
+      SpreadsheetApp.getUi().alert("Column F ChatGPT Prompt for row " + rowNumber + ".");
+    } else {
+      SpreadsheetApp.getUi().alert("Column A is empty for row " + rowNumber + ".");
+    }
+  } else {
+    SpreadsheetApp.getUi().alert("Invalid row number. Please enter a valid row number.");
+  }
+}
+
+//Concatenate and Output
+
+function concatenateAndOutputWithConfirmation() {
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert("Confirmation", "Are you sure you want to concatenate and output data?", ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.YES) {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getActiveSheet();
+    var data = sheet.getRange("A:A").getValues();
+    
+    var concatenatedText = "";
+    
+    for (var i = 0; i < data.length; i++) {
+      if (data[i][0] !== "") {
+        concatenatedText += data[i][0] + " ";
+      }
+    }
+    
+    var lastRow = sheet.getLastRow();
+    var outputRow = lastRow + 2;
+    
+    sheet.getRange(outputRow, 2).setValue(concatenatedText);
+    
+    ui.alert("Operation Completed", "Data concatenated and output successfully.", ui.ButtonSet.OK);
+  } else {
+    ui.alert("Operation Cancelled", "Concatenation and output operation was cancelled.", ui.ButtonSet.OK);
+  }
 }
 
 //Set Columns width to 300
