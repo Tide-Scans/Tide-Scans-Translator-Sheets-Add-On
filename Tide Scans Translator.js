@@ -31,8 +31,68 @@ function onOpen() {
     .addItem('Concatenate and Output', 'concatenateAndOutputWithConfirmation')
     .addSeparator()
     .addItem('Set Columns Widths to 300', 'setColumnWidthsTo300')
+    .addSeparator()
+    .addItem('Extract and Organize Data from Google Docs', 'extractAndOrganizeDataFromGoogleDocsPrompt')
     
     .addToUi();
+}
+
+//Extract and Organize Data from Google Docs
+
+function extractAndOrganizeDataFromGoogleDocsPrompt() {
+  // Prompt the user for a Google Docs URL
+  var docUrl = SpreadsheetApp.getUi().prompt(
+    'Enter the Google Docs URL:',
+    'Please provide the URL',
+    SpreadsheetApp.getUi().ButtonSet.OK_CANCEL
+  );
+
+  if (docUrl.getSelectedButton() === SpreadsheetApp.getUi().Button.OK) {
+    var url = docUrl.getResponseText();
+    if (url !== '') {
+      extractAndOrganizeDataFromGoogleDocs(url);
+    } else {
+      SpreadsheetApp.getUi().alert('Please provide a valid Google Docs URL.');
+    }
+  }
+}
+
+function extractAndOrganizeDataFromGoogleDocs(docUrl) {
+  try {
+    // Open the Google Docs document
+    var doc = DocumentApp.openByUrl(docUrl);
+    var body = doc.getBody();
+    var content = body.getText();
+
+    // Split the content into lines
+    var lines = content.split('\n');
+
+    // Remove the first line
+    lines.shift();
+
+    // Initialize variables for iterating through lines
+    var sheet = SpreadsheetApp.getActiveSheet();
+    var currentRow = sheet.getLastRow() + 1;
+
+    // Iterate through lines and add them to the active sheet
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      
+      // Skip lines with a blank line above them
+      if (line === '') {
+        sheet.getRange(currentRow, 1).setValue(line);
+        currentRow++;
+        i++; // Skip the next line
+      } else {
+        sheet.getRange(currentRow, 1).setValue(line);
+        currentRow++;
+      }
+    }
+  } catch (error) {
+    Logger.log('Error: ' + error);
+    throw new Error('An error occurred while processing the document.');
+  }
+  SpreadsheetApp.getUi().alert('Data extraction and organization complete.');
 }
 
 //Column F ChatGPT Prompt
