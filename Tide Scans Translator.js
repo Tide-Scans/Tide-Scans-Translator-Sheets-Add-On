@@ -24,6 +24,10 @@ function onOpen() {
     .addItem('Column F ChatGPT Prompt - Start and Stop Row', 'showPromptForGPTColumnFWithStartAndStopRow')
     .addItem('Column F ChatGPT Prompt - Specific Row', 'showPromptForGPTColumnF')
     .addSeparator()
+    .addItem('Japanese to Romaji Colum G - Entire Column', 'showPromptForRomajiEntireColumnG')
+    .addItem('Japanese to Romaji Colum G - Start and Stop Row', 'showPromptForRomajiColumnGWithStartAndStopRow')
+    .addItem('Japanese to Romaji Colum G - Specific Row', 'showPromptForRomajiColumnG')
+    .addSeparator()
     .addItem('Remove Spaces in Column A - Entire Column', 'removeSpacesInColumnA')
     .addItem('Remove Spaces in Column A - Start and Stop Row', 'showPromptForRemoveSpacesInColumnA')
     .addItem('Remove Spaces in Column A - Specific Row', 'showPromptForRemoveSpacesInColumnARow')
@@ -35,6 +39,76 @@ function onOpen() {
     .addItem('Extract and Organize Data from Google Docs', 'extractAndOrganizeDataFromGoogleDocsPrompt')
     
     .addToUi();
+}
+
+function showPromptForRomajiEntireColumnG() {
+
+  var ui = SpreadsheetApp.getUi();
+  var response = ui.alert('Japanese to Romaji Colum G - Entire Column', 'This will convert all Japanese in A Column into Romaji in Column G. Are you sure you want to proceed?', ui.ButtonSet.YES_NO);
+
+  if (response === ui.Button.YES) {
+    try {
+      promptForRomajiEntireColumnG();
+    } catch (error) {
+      var errorMessage = "Please check to see if you have added the Japanese to Romaji file to your app script if not please go to GitHub and add it to use this Function";
+      var ui = SpreadsheetApp.getUi();
+      ui.alert('Error: Add-on Missing', errorMessage, ui.ButtonSet.OK);
+    }
+  }
+}
+
+function showPromptForRomajiColumnGWithStartAndStopRow() {
+  var ui = SpreadsheetApp.getUi();
+  var startResult = ui.prompt('Enter the start row number:', ui.ButtonSet.OK_CANCEL);
+
+  if (startResult.getSelectedButton() === ui.Button.OK) {
+    var startRowText = startResult.getResponseText();
+    var startRow = parseInt(startRowText);
+    if (isNaN(startRow) || startRow <= 0) {
+      startRow = 1; // Set startRow to 1 if it's less than or equal to 0
+    }
+    if (!isNaN(startRow)) {
+      var stopResult = ui.prompt('Enter the stop row number:', ui.ButtonSet.OK_CANCEL);
+      if (stopResult.getSelectedButton() === ui.Button.OK) {
+        var stopRowText = stopResult.getResponseText();
+        var stopRow = parseInt(stopRowText);
+        if (!isNaN(stopRow)) {
+          try {
+          romajiColumnGWithStartAndStopRow(startRow, stopRow);
+        } catch (error) {
+          var errorMessage = "Please check to see if you have added the Japanese to Romaji file to your app script if not please go to GitHub and add it to use this Function";
+          var ui = SpreadsheetApp.getUi();
+          ui.alert('Error: Add-on Missing', errorMessage, ui.ButtonSet.OK);
+    }
+        } else {
+          ui.alert('Invalid input. Please enter a valid stop row number.');
+        }
+      }
+    } else {
+      ui.alert('Invalid input. Please enter a valid start row number.');
+    }
+  }
+}
+
+function showPromptForRomajiColumnG() {
+  var ui = SpreadsheetApp.getUi();
+  var result = ui.prompt('Enter the row number to Japanese to Romaji Colum G:', ui.ButtonSet.OK_CANCEL);
+
+  if (result.getSelectedButton() === ui.Button.OK) {
+    var rowNumberText = result.getResponseText();
+    var rowNumber = parseInt(rowNumberText);
+    if (!isNaN(rowNumber)) {
+      try {
+      romajiColumnG(rowNumber);
+    } catch (error) {
+      var errorMessage = "Please check to see if you have added the Japanese to Romaji file to your app script if not please go to GitHub and add it to use this Function";
+      var ui = SpreadsheetApp.getUi();
+      ui.alert('Error: Add-on Missing', errorMessage, ui.ButtonSet.OK);
+    }
+    } else {
+      ui.alert('Invalid input. Please enter a valid row number.');
+    }
+  }
 }
 
 //Extract and Organize Data from Google Docs
