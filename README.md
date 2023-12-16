@@ -11,6 +11,7 @@ The Tide Scans Translator Add-On for Google Sheets allows you to easily translat
 - Remove spaces in Column A for proper input handling.
 - Concatenate and output translation results for ChatGPT prompts in Column F.
 - Generate ChatGPT prompts in Column F.
+- Transliteration of Japanese to Romaji
 
 ## Installation
 
@@ -22,11 +23,15 @@ To use the Tide Scans Translator Add-On, follow these steps:
 
 3. In the Apps Script editor, paste the provided code from the "Tide Scans Translator.js" file.
 
-4. Save the script by clicking the floppy disk icon or pressing `Ctrl + S` (`Cmd + S` on Mac).
+4. While still in the Apps Script editor, add a new script file by clicking the plus button next to files. Choose "Script file" from the menu, and then name the script file with any name you prefer.
 
-5. **Run** the 'onOpen' function by simply clicking the 'Run' button on the toolbar of the Apps Script editor.
+5. After creating the new script file, paste the provided code from the "Japanese to Romaji file.js" file into the newly created script file.
 
-6. You should now see a new menu item named "Tide Scans Translator" in your Google Sheets toolbar. This menu provides various translation and information fetching options.
+6. Save the script by clicking the floppy disk icon or pressing `Ctrl + S` (`Cmd + S` on Mac).
+
+7. **Run** the 'onOpen' function by simply clicking the 'Run' button on the toolbar of the Apps Script editor.
+
+8. You should now see a new menu item named "Tide Scans Translator" in your Google Sheets toolbar. This menu provides various translation and information fetching options.
 
 ## Usage
 
@@ -43,6 +48,8 @@ To use the Tide Scans Translator Add-On, follow these steps:
 6. To concatenate and output translation results, select "Concatenate and Output" from the "Tide Scans Translator" menu.
 
 7. To generate ChatGPT prompts, select "Generate ChatGPT Prompt" from the "Tide Scans Translator" menu. Prompts will be generated in Column F.
+
+8. To Convert Japanese text into Romaji, select "Japanese to Romaji" from the "Tide Scans Translator" menu. Text will be converted in Column G.
 
 ## Additional Functionality
 
@@ -63,6 +70,8 @@ Upon installation, the following additional functionality is automatically added
 - **Jisho Word Information** submenu: Provides options to fetch word information using Jisho.
 
 - **Prompt Generation** submenu: Provides options to generate prompts for language learning using ChatGPT.
+
+- **Japanese to Romaji** submenu: Provides options to Convert Japanese to Romaji using a hardcode dictionary and Jisho.
 
 - **Remove Spaces in Column A**: Removes spaces in Column A for proper input handling.
 
